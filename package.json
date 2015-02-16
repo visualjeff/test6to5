@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "test": "mocha --compilers js:6to5/register"
+  },
+  "devDependencies": {
+    "6to5": "*",
+    "mocha": "*"
+  }
+}
