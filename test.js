@@ -421,13 +421,31 @@ describe('ES6 functionality supported', function(){
     })
   })
 
-/*
   describe('destructuring', function(){
-    it('', function(){
-      return assert.strictEqual(,);
+    it('defaults, let temporal dead zone', function(){
+      var {a, b = 2} = { a:1 };
+      try {
+        eval("let {c = c} = {};");
+        return false;
+      } catch(e) {}
+      try {
+        eval("let {c = d, d} = {d:1};");
+        return false;
+      } catch(e) {}
+      return (assert.strictEqual(a, 1) && assert.strictEqual(b, 2));
     })
   })
-*/
+
+  describe('destructuring', function(){
+    it('defaults in parameters, seperate scope', function(){
+      return (function({a=function() {
+        return typeof b === 'undefined';
+      }}) {
+        var b = 1;
+        return a();
+      }({}));
+    })
+  })
 
   describe('default parameters', function(){
     it('basic functionality', function(){
