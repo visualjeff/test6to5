@@ -19,7 +19,7 @@ describe('ES6 functionality supported', function(){
   describe('const', function(){
     it('confirm const redefine is an error', function(){
       try {
-        Function ("const foo = 1; const foot = 2;")(); //IFFE - Immediately-Invoked Function Expression
+        Function ("const foo = 1; const foo = 2;")(); //IFFE - Immediately-Invoked Function Expression
       } catch(e) {
         return true;
       }
@@ -72,6 +72,7 @@ describe('ES6 functionality supported', function(){
     })
   })
 
+  //let provides true block scoping.
   describe('let', function(){
     it('basic support', function(){
       let foo = 123;
@@ -97,7 +98,7 @@ describe('ES6 functionality supported', function(){
 
   describe('let', function(){
     it('confirm let temporal dead zone', function(){
-      var passed = ( function() { try { qux; } catch(e) { return true; }}());
+      var passed = ( function() { try { qux; } catch(e) { return true; }}()); //undefined qux causes a an error which returns true.
       let qux = 456;
       return passed;
     })
@@ -110,12 +111,14 @@ describe('ES6 functionality supported', function(){
           scopes.push(function() { return i; });
       };
       let passed = (scopes[0]() === 0 && scopes[1]() === 1);
+      //let passed = (assert.strictEqual(scopes[0](), 0) && assert.strictEqual(scopes[1](), 1));
 
       scopes = [];
       for (let i in {a: 1, b: 1}) {
         scopes.push(function() { return i; });
       };
       passed &= (scopes[0]() === 1 && scopes[1]() === 2);
+      //passed &= (assert.strictEqual(scopes[0](), 1) && assert.strictEqual(scopes[1](), 2));
       return passed;
     })
   })
@@ -163,12 +166,14 @@ describe('ES6 functionality supported', function(){
         scopes.push(function() { return i; });
       };
       let passed = (scopes[0]() === 0 && scopes[1]() === 1);
+      //let passed = (assert.strictEqual(scopes[0](), 0) && assert.strictEqual(scopes[1](), 1));
 
       scopes = [];
       for (let i in {a: 1, b: 1}) {
         scopes.push(function() { return i; });
       };
       passed &= (scopes[0]() === 1 && scopes[1]() === 2);
+      //passed &= (assert.strictEqual(scopes[0](), 1) && assert.strictEqual(scopes[1](), 2));
       return passed;
     })
   })
