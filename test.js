@@ -56,7 +56,7 @@ describe('ES6 functionality supported', function(){
       "use strict";
       const baz = 1;
       try {
-        Function ("use strict; const foo = 1; const foot = 2;")(); //IFFE - Immediately-Invoked Function Expression
+        Function ("use strict; const foo = 1; const foo = 2;")(); //IFFE - Immediately-Invoked Function Expression
       } catch(e) {
         return true;
       }
