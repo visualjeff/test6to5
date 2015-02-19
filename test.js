@@ -750,8 +750,25 @@ describe('Unicode code point escapes', function(){
   })
 })
 
+describe('Arrow function', function(){
+  it('0 parameters', function(){
+    return assert.strictEqual((() => 5)(), 5);
+  })
+})
 
+describe('Arrow function', function(){
+  it('1 parameters, no brackets', function(){
+    var b = x => x + "foo";
+    return assert.strictEqual(b("fee fie foe "), "fee fie foe foo");
+  })
+})
 
+describe('Arrow function', function(){
+  it('multiple parameters', function(){
+    var c = (v, w, x, y, z) => "" + v + w + x + y + z;
+    return assert.strictEqual(c(6, 5, 4, 3, 2), "65432");
+  })
+})
 
 
 function __createIterableObject(a, b, c) {
