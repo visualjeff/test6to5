@@ -770,6 +770,30 @@ describe('Arrow function', function(){
   })
 })
 
+describe('Arrow function', function(){
+  it('lexical "this" binding', function(){
+    var d = { x: "bar", y: function() { return z => this.x + z}}.y();
+    var e = { x: "baz", y: d };
+    return (assert.strictEqual(d("ley"), "barley") && assert.strictEqual(e.y("ley"), "barley"));
+  })
+})
+
+describe('Arrow function', function(){
+  it('"this" unchanged by call or apply', function(){
+    var d = { x: "foo", y: function() { return z => this.x}};
+    var e = { x: "bar"};
+    return (assert.strictEqual(d.y().call(e), "foo") && assert.strictEqual(d.y().apply(e), "foo"));
+  })
+})
+
+describe('Arrow function', function(){
+  it("can't be bound, can be curried", function(){
+    var d = { x: "bar", y: function() { return z => this.x + z}};
+    var e = { x: "baz"};
+    return (assert.strictEqual(d.y().bind(e, "ley")(), "barley"));
+  })
+})
+
 
 function __createIterableObject(a, b, c) {
   if (typeof Symbol === "function" && Symbol.iterator) {
