@@ -794,6 +794,22 @@ describe('Arrow function', function(){
   })
 })
 
+describe('Arrow function', function(){
+  it('lexical "arguments" binding', function(){
+    var f = (function() { return z => arguments[0];})(5);
+    return (assert.strictEqual(f(6), 5));
+  })
+})
+
+describe('Arrow function', function(){
+  it('no line break between param and =>', function(){
+    return (() => {
+      try { Function("x\n => 2")(); }  catch(e) { return true;}
+    })();
+  })
+})
+
+
 
 function __createIterableObject(a, b, c) {
   if (typeof Symbol === "function" && Symbol.iterator) {
