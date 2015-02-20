@@ -809,7 +809,59 @@ describe('Arrow function', function(){
   })
 })
 
+describe('Arrow function', function(){
+  it('no prototype property', function(){
+    var a = () => 5;
+    return !a.hasOwnProperty("prototype");
+  })
+})
 
+describe('Arrow function', function(){
+  it('lexical "super" binding', function(){
+    class B {
+      qux() {
+        return "quux";
+      }
+    }
+    class C extends B {
+      baz() {
+        return x => super.qux();
+      }
+    }
+    var arrow = new C().baz();
+    return (assert.strictEqual(arrow(), "quux"));
+  })
+})
+
+/* Not supportted by babel currently
+describe('Arrow function', function(){
+  it('lexical "new.target" binding', function(){
+    function C() {
+      return x => new.target;
+    }
+    return new C()() === C && C()() === undefined;
+  })
+})
+*/
+
+describe('Class', function(){
+  it('class statement', function(){
+    class C {}
+    return assert.strictEqual((typeof C), "function");
+  })
+})
+
+describe('Class', function(){
+  it('block scoped', function(){
+    class C {}
+    var c1 = C;
+    {
+      class C {}
+      var c2 = C;
+    }
+    return assert.strictEqual(C, c1);
+  })
+})
 
 function __createIterableObject(a, b, c) {
   if (typeof Symbol === "function" && Symbol.iterator) {
