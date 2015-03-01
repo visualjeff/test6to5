@@ -863,6 +863,219 @@ describe('Class', function(){
   })
 })
 
+describe('Class', function(){
+  it('class expression', function(){
+    return assert.strictEqual((typeof class C{}), "function");
+  })
+})
+
+describe('Class', function(){
+  it('constructor', function(){
+    class C {
+      constructor() {
+        this.x = 1;
+      }
+    }
+    return assert.strictEqual(C.prototype.constructor, C) && assert.strictEqual(new C().x, 1);
+  })
+})
+
+describe('Class', function(){
+  it('prototype methods', function(){
+    class C {
+      method() {
+        return 2;
+      }
+    }
+    return assert.strictEqual((typeof C.prototype.method), "function") && assert.strictEqual(new C().method(), 2);
+  })
+})
+
+describe('Class', function(){
+  it('static methods', function(){
+    class C {
+      static method() {
+        return 3;
+      }
+    }
+    return assert.strictEqual((typeof C.method), "function") && assert.strictEqual(C().method(), 3);
+  })
+})
+
+describe('Class', function(){
+  it('accessor methods', function(){
+    var baz = false;
+    class C {
+      get foo() {
+        return "foo";
+      }
+      set bar(x) {
+        baz = x;
+      }
+    }
+    new C().bar = true;
+    return assert.strictEqual(new C().foo, "foo") && baz;
+  })
+})
+
+describe('Class', function(){
+  it('static accessor methods', function(){
+    var baz = false;
+    class C {
+      static get foo() {
+        return "foo";
+      }
+      static set bar(x) {
+        baz = x;
+      }
+    }
+    C.bar = true;
+    return assert.strictEqual(C.foo, "foo") && baz;
+  })
+})
+
+describe('Class', function(){
+  it("methods aren't enumerable", function(){
+    class C {
+      foo() {
+      }
+      static bar() {
+      }
+    }
+    return !C.prototype.propertyIsEnumerable("foo") && !C.propertyIsEnumerable("bar");
+  })
+})
+
+describe('Class', function(){
+  it('implicit strict mode', function(){
+    class C {
+      static method() {
+        return this === undefined;
+      }
+    }
+    return (0,C.method)();
+  })
+})
+
+describe('Class', function(){
+  it('constructor requires new', function(){
+    class C {}
+    try {
+      C();
+    } catch(e) {
+      return true;
+    }
+    return false;
+  })
+})
+
+describe('Class', function(){
+  it('extends', function(){
+    class B {}
+    class C extends B {};
+    return (new C() instanceof B &&
+      B.isPrototypeOf(C) &&
+      B.prototype.isPrototypeOf(C.prototype));
+  })
+})
+
+describe('Class', function(){
+  it('extends expression', function(){
+    var B;
+    class C extends (B = class {}) {};
+    return (new C() instanceof B &&
+      B.isPrototypeOf(C) &&
+      B.prototype.isPrototypeOf(C.prototype));
+  })
+})
+
+describe('Class', function(){
+  it('extends null', function(){
+    class C extends null {
+      constructor() {}
+    };
+    var c = new C();
+    return !(c instanceof Object &&
+      Function.prototype.isPrototypeOf(C) &&
+      Object.getPrototypeOf(c.prototype) === null);
+  })
+})
+
+
+/* Currently failing
+
+describe('Class', function(){
+  it('new.target', function(){
+    var passed = false;
+    class A {
+      constructor() {
+        passed = new.target === B;
+      }
+    }
+    class B extends A {}
+    new B();
+    (function() {
+      passed &= new.target === undefined;
+    }())
+    return passed;
+  })
+})
+*/
+
+describe('Super', function(){
+  it('statement in constructors', function(){
+    var passed = false;
+    class B {
+      constructor(a) { passed = ( a === "barbaz"); }
+    }
+    class C extends B {
+      constructor(a) { super( "bar" + a );}
+    };
+    new C("baz");
+    return passed;
+  })
+})
+
+describe('Super', function(){
+  it('expression in constructors', function(){
+    class B {
+      constructor(a) { return [ "foo" + a ]; }
+    }
+    class C extends B {
+      constructor(a) { return super( "bar" + a );}
+    };
+    return assert.strictEqual(new C("baz")[0], "foobarbaz");
+  })
+})
+
+describe('Super', function(){
+  it('in methods', function(){
+    class B {
+      qux(a) { return "foo" + a; }
+    }
+    class C extends B {
+      qux(a) { return super.qux( "bar" + a );}
+    };
+    return assert.strictEqual(new C().qux("baz"), "foobarbaz");
+  })
+})
+
+describe('Super', function(){
+  it('in statically bound', function(){
+    class B {
+      qux() { return "bar"; }
+    }
+    class C extends B {
+      qux() { return super.qux() + this.corge;}
+    };
+    var obj = {
+      qux: C.prototype.qux,
+      corge: "ley"
+    }
+    return assert.strictEqual(obj.qux(), "barley");
+  })
+})
+
 function __createIterableObject(a, b, c) {
   if (typeof Symbol === "function" && Symbol.iterator) {
     var arr = [a, b, c, ,];
