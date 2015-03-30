@@ -1808,6 +1808,173 @@ describe('WeakMap', function() {
 });
 
 
+describe('WeakSet', function() {
+    it('basic functionality', function() {
+        var obj1 = {};
+        var obj2 = {};
+        var weakset = new WeakSet();
+        weakset.add(obj1);
+        weakset.add(obj2);
+        return weakset.has(obj1);
+    });
+});
+
+
+describe('WeakSet', function() {
+    it('constructor arguments', function() {
+        var obj1 = {};
+        var obj2 = {};
+        var weakset = new WeakSet([obj1, obj2]);
+        return weakset.has(obj1) && weakset.has(obj2);
+    });
+});
+
+//Placeholder for proxy
+
+
+describe('Reflect', function() {
+    it('Reflect.get', function() {
+        return Reflect.get({
+            qux: 987
+        }, "qux") === 987;
+    });
+});
+
+
+describe('Reflect', function() {
+    it('Reflect.set', function() {
+        var obj = {};
+        Reflect.set(obj, "quux", 654);
+        return obj.quux === 654;
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.has', function() {
+        return Reflect.has({
+            qux: 987
+        }, "qux");
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.deleteProperty', function() {
+        var obj = {
+            bar: 123
+        };
+        Reflect.deleteProperty(obj, "bar");
+        return !("bar" in obj);
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.getOwnPropertyDescriptor', function() {
+        var obj = {
+            baz: 789
+        };
+        var desc = Reflect.getOwnPropertyDescriptor(obj, "baz");
+        return desc.value === 789 && desc.configurable && desc.writable && desc.enumerable;
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.defineProperty', function() {
+        var obj = {};
+        Reflect.defineProperty(obj, "foo", {
+            value: 123
+        });
+        return obj.foo === 123;
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.getPrototypeOf', function() {
+        return Reflect.getPrototypeOf([]) === Array.prototype;
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.setPrototypeOf', function() {
+        var obj = {};
+        Reflect.setPrototypeOf(obj, Array.prototype);
+        return obj instanceof Array;
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.isExtensible', function() {
+        return Reflect.isExtensible({}) && !Reflect.isExtensible(Object.preventExtensions({}));
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.preventsExtensions', function() {
+        var obj = {};
+        Reflect.preventExtensions(obj);
+        return !Reflect.isExtensible(obj);
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.enumerate', function() {
+        var obj = {
+            foo: 1,
+            bar: 2
+        }
+        var iterator = Reflect.enumerate(obj);
+        var passed = 1;
+        if (typeof Symbol === 'function' && 'iterator' in Symbol) {
+            passed &= Symbol.iterator in iterator;
+        }
+        var item = iterator.next();
+        passed &= item.value === "foo" && item.done === false;
+        item = iterator.next();
+        passed &= item.value === "bar" && item.done === false;
+        item = iterator.next();
+        passed &= item.value === undefined && item.done === true;
+        return passed === 1;
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.ownKeys', function() {
+        var obj = {
+            foo: 1,
+            bar: 2
+        };
+        return Reflect.ownKeys(obj) + "" === "foo,bar";
+    });
+});
+
+describe('Reflect', function() {
+    it('Reflect.apply', function() {
+        return Reflect.apply(Array.prototype.push, [1, 2], [3, 4, 5]) === 5;
+    });
+});
+
+
+describe('Reflect', function() {
+    it('Reflect.construct', function() {
+        return Reflect.construct(function(a, b, c) {
+            this.qux = a + b + c;
+        }, ["foo", "bar", "baz"]).qux === "foobarbaz";
+    });
+});
+
+
+/* new.target as a parameters is not yet defined */
+/*
+describe('Reflect', function() {
+    it('Reflect.construct, new.target', function() {
+        return Refect.construct(function(a, b, c) {
+            if (new.target === Object) {
+                this.qux = a + b + c;
+            }
+        }, ["foo", "bar", "baz"], Object).qux === "foobarbaz";
+    });
+});
+*/
+
 
 //Built-in Promise
 describe('Promise', function() {
@@ -1920,10 +2087,107 @@ describe('Promise', function() {
 });
 
 
+describe('Symbol', function() {
+    it('basic functionality', function() {
+        var object = {};
+        var symbol = Symbol();
+        var value = {};
+        object[symbol] = value;
+        return object[symbol] === value;
+    });
+});
 
 
+describe('Symbol', function() {
+    it('typeof support', function() {
+        return typeof Symbol() === "symbol";
+    });
+});
 
 
+describe('Symbol', function() {
+    it('symbol keys are hidden to pre-ES6 code', function() {
+        var object = {};
+        var symbol = Symbol();
+        object[symbol] = 1;
+        for (var x in object) {}
+        var passed = !x;
+        if (Object.keys && Object.getOwnPropertyNames) {
+            passed &= Object.keys(object).length === 0 && Object.getOwnPropertyNames(object) === 0
+        }
+        return passed;
+    });
+});
+
+
+describe('Symbol', function() {
+    it('Object.defineProperty support', function() {
+        var object = {};
+        var symbol = Symbol();
+        var value = {};
+        if (Object.defineProperty) {
+            Object.defineProperty(object, symbol, {
+                value: value
+            });
+            return Object[symbol] === value;
+        }
+        return passed;
+    });
+});
+
+
+describe('Symbol', function() {
+    it('canot coerce to string or number', function() {
+        var symbol = Symbol();
+        try {
+            symbol + "";
+            return false;
+        } catch (e) {}
+        try {
+            symbol + 0;
+            return false;
+        } catch (e) {}
+        return true;
+    });
+});
+
+
+describe('Symbol', function() {
+    it('can convert with String()', function() {
+        return String(Symbol("foo")) === "Symbol(foo)";
+    });
+});
+
+
+describe('Symbol', function() {
+    it('new Symbol() throws', function() {
+        try {
+            new Symbol()
+        } catch (e) {
+            return true;
+        }
+    });
+});
+
+describe('Symbol', function() {
+    it('Object(symbol)', function() {
+        var symbol = Symbol();
+        var symbolObject = Object(symbol);
+
+        return typeof symbolObject === "object" &&
+            symbolObject.type == symbol &&
+            symbolObject !== symbol &&
+            symbolObject.valueOf === symbol;
+    });
+});
+
+describe('Symbol', function() {
+    it('global symbol registry', function() {
+        var symbol = Symbol.for("foo");
+        return Symbol.for("foo") === symbol &&
+            Symbol.keyFor(symbol) === "foo";
+    });
+});
 
 
 function __createIterableObject(a, b, c) {
