@@ -2190,6 +2190,125 @@ describe('Symbol', function() {
 });
 
 
+describe('well-known symbols', function() {
+    it('Symbol.hasInstance', function() {
+        var passed = false;
+        var obj = {
+            foo: true
+        };
+        var C = function() {}; //Constructor object
+        Object.defineProperty(
+            C, Symbol.hasInstance, {
+                value: function(inst) {
+                    passed = inst.foo;
+                    return false;
+                }
+            }
+        );
+        obj instanceof C;
+        return true;
+    });
+});
+
+
+
+describe('well-known symbols', function() {
+    it('Symbol.isConcatSpreadable', function() {
+        var a = [],
+            b = [];
+        b[Symbol.isConcatSpreadable] = false;
+        a = a.concat(b);
+        return a[0] === b;
+    });
+});
+
+
+describe('well-known symbols', function() {
+    it('Symbol.iterator', function() {
+        var a = 0,
+            b = {};
+        b[Symbol.iterator] = function() {
+            return {
+                next: function() {
+                    return {
+                        done: a++ === 1,
+                        value: "foo"
+
+                    };
+                }
+            };
+        };
+        var c;
+        for (c of b) {}
+        return c === "foo";
+    });
+});
+
+
+
+describe('well-known symbols', function() {
+    it('Symbol.species', function() {
+        return RegExp[Symbol.species] === "RegExp" &&
+            Array[Symbol.species] === "Array" &&
+            !(Symbol.species in Object);
+    });
+});
+
+
+
+describe('well-known symbols', function() {
+    it('Symbol.toPrimative', function() {
+        var a = {},
+            b = {},
+            c = {};
+        var passed = 0;
+        a[Symbol.toPrimative] = function(hint) {
+            passed += hint === "number";
+            return 0;
+        };
+        b[Symbol.toPrimative] = function(hint) {
+            passed += hint === "string";
+            return 0;
+        };
+        c[Symbol.toPrimative] = function(hint) {
+            passed += hint === "default";
+            return 0;
+        };
+        a >= 0;
+        b = {};
+        c == 0;
+        return passed === 3;
+    });
+});
+
+
+describe('well-known symbols', function() {
+    it('Symbol.toStringTag', function() {
+        var a = {};
+        a[Symbol.toStringTag] = "foo";
+        return (a + "") === "[Object foo]";
+    });
+});
+
+//Test won't run in strict mode
+/*
+describe('well-known symbols', function() {
+    it('Symbol.unscopables', function() {
+        var a = {
+            foo: 0,
+            bar: 1
+        };
+        a[Symbol.unscopeables] = {
+            bar: true
+        };
+        with(a) {
+            return foo === 1 && typeof bar === "undefined";
+        }
+    });
+});
+*/
+
+
 function __createIterableObject(a, b, c) {
     if (typeof Symbol === "function" && Symbol.iterator) {
         var arr = [a, b, c, , ];
