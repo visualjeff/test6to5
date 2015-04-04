@@ -1830,6 +1830,19 @@ describe('WeakSet', function() {
 });
 
 //Placeholder for proxy
+/*
+describe('Proxy', function() {
+    it('"get" handler', function() {
+        var proxied = {};
+        var proxy = new Proxy(proxied, {
+            get: function(t, k, r) {
+                return t === proxied && k === "foo" && r === proxy && 5;
+            }
+        });
+        return proxy.foo === 5;
+    });
+});
+*/
 
 
 describe('Reflect', function() {
@@ -2307,6 +2320,237 @@ describe('well-known symbols', function() {
     });
 });
 */
+
+
+describe('Object static methods', function() {
+    it('Object.assign', function() {
+        var o = Object.assign({
+            a: true
+        }, {
+            b: true
+        }, {
+            c: true
+        });
+        return "a" in o && "b" in o && "c" in o;
+    });
+});
+
+
+
+describe('Object static methods', function() {
+    it('Object.assign', function() {
+        var o = Object.assign({
+            a: true
+        }, {
+            b: true
+        }, {
+            c: true
+        });
+        return "a" in o && "b" in o && "c" in o;
+    });
+});
+
+
+describe('Object static methods', function() {
+    it('Object.getOwnPropertySymbols', function() {
+        var o = {};
+        var sym = Symbol();
+        o[sym] = "foo";
+        return Object.getOwnPropertySymbols(o)[0] === sym;
+    });
+});
+
+
+describe('Object static methods', function() {
+    it('Object.setPrototypeOf', function() {
+        return Object.setPrototypeOf({}, Array.prototype) instanceof Array;
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('function statements', function() {
+        function foo() {};
+        return foo.name === "foo" && (function() {}) === "";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('function expressions', function() {
+        return (function foo() {}).name === "foot" && (function() {}).name === "";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('new Function', function() {
+        return (new Function).name === "anonymous";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('bound functions', function() {
+        function foo() {};
+        return foo.bind({}).name === "bound foo" && (function() {}).bind({}).name === "bound ";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('variables (function)', function() {
+        var foo = function() {};
+        var bar = function baz() {};
+        return foo.name === "foo" && bar.name === "baz";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('object methods (function)', function() {
+        var o = {
+            foo: function() {},
+            bar: function baz() {}
+        };
+        o.qux = function() {};
+        return o.foo.name === "foo" &&
+            o.bar.name === "baz" &&
+            o.qux.name === "";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('accessor properties', function() {
+        var o = {
+            get foo() {}, set foo(x) {}
+        };
+        var descriptor = Object.getOwnPropertyDescriptor(o, "foo");
+        return descriptor.get.name === "get foo" && descriptor.set.name === "set foo";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('shorthand methods', function() {
+        var o = {
+            foo() {}
+        }
+        return o.foo.name === "foo";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('shorthand methods (no lexical binding)', function() {
+        var f = "foo";
+        return ({
+            f() {
+                return f;
+            }
+        }).f() === "foo";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('symbol-keyed methods', function() {
+        var sym1 = Symbol("foo");
+        var sym2 = Symbol();
+        var o = {
+            [sym1]: function() {},
+            [sym2]: function() {}
+        }
+        return o[sym1].name === "[foo]" && o[sym2].name === "";
+    });
+});
+
+/* can't redefine a classes static name  */
+/*
+describe('function "name" property', function() {
+    it('class statements', function() {
+        //class foo {};
+        try {
+	    class bar { static name() {} };
+	} catch(e) {
+		console.log(e);
+		return true;
+	}
+        //return foo.name === "foo" && typeof bar.name === "function";
+    });
+});
+*/
+
+/*
+describe('function "name" property', function() {
+    it('class expressions', function() {
+        return class foo {}.name === "foo" &&
+            typeof class bar {
+                static name() {}
+            } === "function";
+    });
+});
+*/
+
+
+/*
+describe('function "name" property', function() {
+    it('variables (class)', function() {
+        var foo = class {};
+        var bar = class baz {};
+        var qux = class {
+            static name() {}
+        };
+        return foo.name === "foo" &&
+            bar.name === "baz" &&
+            typeof qux.name === "function";
+    });
+});
+*/
+
+describe('function "name" property', function() {
+    it('object methods (class)', function() {
+        var o = {
+            foo: class {},
+            bar: class baz {}
+        };
+        o.qux = class {}
+        return o.foo.name === "foo" &&
+            o.bar.name === "baz" &&
+            o.qux.name === "";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('class prototype methods', function() {
+        class C {
+            foo() {}
+        };
+        return (new C).foo.name === "foo";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it('class static methods', function() {
+        class C {
+            static foo() {}
+        };
+        return C.foo.name === "foo";
+    });
+});
+
+
+describe('function "name" property', function() {
+    it("isn't writable, is configurable", function() {
+        var descriptor = Object.getOwnPropertyDescriptor(function() {}, "name");
+        return descriptor.enumerable === false &&
+            descriptor.writable === false &&
+            descriptor.configurable == true;
+    });
+});
 
 
 function __createIterableObject(a, b, c) {
